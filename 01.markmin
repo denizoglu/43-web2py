@@ -48,39 +48,27 @@ def f(): ....
 
 kayıtlı olmayan ve "kisiler" veritabanı tablosundaki kayıtlardan "read" izni olmayan bir gruptaki misafir kullanıcıların ``f`` fonksiyonuna erişimini engeller. Eğer ziyaretçi sisteme giriş yapmamışsa, bir giriş sayfasına yönlendirilir (web2py bunu öntanımlı olarak sağlar).
 
-web2py
+web2py, bileşenler, yani bir sayfanın görünümünün içinde yüklenerek o sayfayı yeniden yüklemenize gerek bırakmaksızın Ajax vasıtasıyla ziyaretçi ile etkileşimde bulunmasına izin veren işlemlari de kullanmanıza izin verir. Bu, uygulamaları iyice modüler şekilde dizayn edebilmenize imkan veren ``LOAD`` yardımcısı kullanılarak yapılır, bu yardımcı daha sonra 3. Bölüm'de wiki bağlamında ve en son daha da detaylı olarak kitabın son bölümünde incelenecektir.   
 
-web2py also supports components, i.e. actions which can be loaded in a view and interact with the visitor via Ajax without re-loading the entire page. This is done via a ``LOAD`` helper which allows very modular design of applications; it is discussed in chapter 3 in the context of the wiki and, in some detail, in the last chapter of this book.
+Kitabımızın bu 6. Baskısı ``web2py`` 2.4.1 ve daha sonraki sürümleri anlatmaktadır. 
 
-This 6th edition of the book describes ``web2py`` 2.4.1 and later versions.
+### İlkeler
 
-### Principles
+Python'da programlama tipik olarak şu ilkeleri takip etmektedir:
+- Kendini Tekrar Etme! (DRY - Don't Repeat Yourself)
+- Birşeyi yapmanın tek bir yolu olmalıdır
+- Açık ve doğrudan olan, örtülü ve dolaylı olandan daha iyidir.
 
-Python programming typically follows these basic principles:
-- Don't repeat yourself (DRY).
-- There should be only one way of doing things.
-- Explicit is better than implicit.
-
-web2py fully embraces the first two principles by forcing the developer to use sound software
-engineering practices that discourage repetition of code. web2py guides the developer through almost
-all the tasks common in web application development (creating and processing forms, managing
-sessions, cookies, errors, etc.).
+web2py ilk iki ilkeyi tamamen kabul ederek programcıyı kod tekrarını men eden oturmuş sağlam yazılım mühendisliği uygulamalarını takip etmeleri yönünde teşvik eder. web2py ayrıca geliştiricilere web uygulama geliştirmede artık standart haline gelmiş işlerde (formlar oluşturmak ve onları işlemek, oturumları yönetmek, çerezler, hatalar vs.) yol göstermektedir. 
 
 ``request``:inxx
-web2py differs from other frameworks with regard to the third principle, which sometimes conflicts
-with the other two. In particular, web2py does not import user applications, but executes them in a predefined context.  This context exposes the Python keywords, as well as the web2py keywords.
+web2py diğer çatılardan üçüncü bir açıdan da ayrılmaktadır, ki bu bazen ilk ikisiyle çelişebilir. Temelde, web2py kullanıcı uygulamalarını içe aktarmaz, onun yerine önceden tanımlanmış bir ortam içinde çalıştırır. Bu ortamda Python komutları ve anahtar kelimeleri ve web2py'ın anahtar kelimeleri bulunmaktadır. 
 
-To some this may appear as magic, but it should not.
-Simply, in practice, some modules are already imported without you doing so.
-web2py is trying to avoid the annoying characteristic of
-other frameworks that force the developer to import the same modules at the top of every model and
-controller.
+Bu, bazılarına sihir gibi görünebilir, ancak değildir ve öyle de görülemelidir. Sadece, pratikte, bazı bileşenler/modüller sizin yapmanıza gerek kalmadan çağrılırlar. web2py bu şekilde diğer bazı çatıların sahip olduğu tipik sıkıcı özellik olan 'her model ve kontrolün başında hep aynı modülleri çağırma' dan kaçınmaya çalışmaktadır.
 
-web2py, by importing its own modules, saves time and prevents mistakes, thus following the spirit of "don't repeat yourself"
-and "there should be only one way of doing things".
+web2py kendi modüllerini çağırarak hem zaman kazanmakta hem de hataları önlemektedir. Böylece Python'un "Kendini Tekrar Etme!" ve "Birşeyi yapmanın tek bir yolu olmalıdır" felsefelerine uymaktadır. 
 
-If the developer wishes to use other Python modules or third-party modules, those
-modules must be imported explicitly, as in any other Python program.
+Eğer geliştirici başka Python modülleri veya 3. taraf yazılımlarını kullanmak isterse, bu modüller tıpkı diğer Python programlarında olduğu gibi ayrıca çağrılmalıdırlar.
 
 ### Web frameworks
 ``PHP``:inxx ``ASP``:inxx ``JSP``:inxx
