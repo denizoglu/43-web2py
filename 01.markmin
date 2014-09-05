@@ -27,7 +27,7 @@ db.define_table('kisiler', Field('isim'), Field('resim', 'upload'))
 
 tek satırlık kod "isim" adlı normal yazı tipinde bir alan ile "resim"  adlı bir yüklenmesi beklenen ve gereken bir gerçek resim dosyası alanını içeren "kisiler" adında bir veritabanı tablosu oluşturur. Eğer böyle bir veritabanı halihazırda mevcut ise ve fakat bu tanıma uymuyorsa, uygun bir şekilde değiştirilir. 
 
-Yukardaki veritabanı tablosu oluşturuldu farzedersek, 
+Yukarıdaki veritabanı tablosu oluşturuldu farzedersek, 
 ``
 form = SQLFORM(db.kisiler).process()
 ``:code
@@ -70,152 +70,116 @@ web2py kendi modüllerini çağırarak hem zaman kazanmakta hem de hataları ön
 
 Eğer geliştirici başka Python modülleri veya 3. taraf yazılımlarını kullanmak isterse, bu modüller tıpkı diğer Python programlarında olduğu gibi ayrıca çağrılmalıdırlar.
 
-### Web frameworks
+### Web Çatıları
 ``PHP``:inxx ``ASP``:inxx ``JSP``:inxx
 
-At its most fundamental level, a web application consists of a set of programs (or functions) that are
-executed when the corresponding URL is visited.
-The output of the program is returned to the visitor and rendered by the browser.
+En temelde, bir web uygulaması bir URL ziyaret edildiğinde çalıştırılan programlar (veya fonksiyonlar) kümesidir denilebilir. Program(lar)ın çıktısı ziyaretçiye geri verilir ve tarayıcı da bunu görünümle giydirerek ziyaretçiye sayfanın son halini gösterir.
 
-The purpose of web frameworks is to allow developers to build new apps quickly, easily and without mistakes.
-This is done by providing APIs and tools that reduce and simplify the amount of coding that is required.
+Web uygulama çatılarının amacı geliştiricilerin uygulamalarını hızlı, kolayca ve hatasızca üretebilmelerini sağlamaktır. Bu da API'lar (Application Protocol Interface - Uygulama Protokol Arayüzü) ve gerekli kodun yazılmasını kolaylaştıran ve hızlandıran araçlarla olur. 
 
-The two classic approaches for developing web applications are:
-- Generating HTML``html-w``:cite ``html-o``:cite  programmatically.
-- Embedding code into HTML pages.
+Web uygulamaları geliştirirken izlenen iki klasik yaklaşım şunlardır:
+- HTML'i programlar aracılığıyla üretmek
+- HTML sayfalarının içine yazılan kodu gömmek
 
-The first model is the one that was followed, for example, by early CGI scripts.
-The second model is followed, for example, by PHP``php``:cite
-(where the code is in PHP, a C-like language), ASP (where the code is in Visual Basic), and JSP (where the code is in Java).
+Bunlardan ilki, ilk CGI betiklerinin takip ettiği sistemdi. İkinci yaklaşım ise C'ye benzer bir dil olan PHP``php``:cite (kod PHP dilindedir), Visual Basic dilinde yazılmış olan ASP ve kodu Java'da yazılan JSP gibi örneklerini verebileceğimiz uygulamalar tarafından benimsenmiştir.
 
-Here is an example of a PHP program that, when executed, retrieves data from a database and
-returns an HTML page showing the selected records:
+İsterseniz bunu örneklerde görelim. Aşağıdaki PHP kodu çalıştırıldığında size bir veritabanından verileri alır, bunların arasından seçilen bazılarını gösterecek bir HTML sayfası üretir:
 ``
 <html><body><h1>Records</h1><?
   mysql_connect(localhost,username,password);
-  @mysql_select_db(database) or die( "Unable to select database");
-  $query="SELECT * FROM contacts";
-  $result=mysql_query($query);
+  @mysql_select_db(database) or die( "Veritabanina baglanamadi!");
+  $sorgu="SELECT * FROM kisiler";
+  $sonuc=mysql_query($sorgu);
   mysql_close();
   $i=0;
-  while ($i < mysql_numrows($result)) {
-    $name=mysql_result($result,$i,"name");
-    $phone=mysql_result($result,$i,"phone");
-    echo "<b>$name</b><br>Phone:$phone<br /><br /><hr /><br />";
+  while ($i < mysql_numrows($sonuc)) {
+    $isim=mysql_result($sonuc,$i,"isim");
+    $telefon=mysql_result($sonuc,$i,"telefon");
+    echo "<b>$isim</b><br>Telefon:$telefon<br /><br /><hr /><br />";
     $i++;
   }
 ?></body></html>
 ``:code
 
-The problem with this approach is that code is embedded into HTML, but the very same code also needs to
-generate additional HTML and to generate SQL statements
-to query the database, entangling multiple layers of
-the application and making it difficult to read and maintain. The situation is
-even worse for Ajax applications, and the complexity grows with the number of pages (files) that make up
-the application.
+Bu yaklaşımın problemi php kodunun HTML'in içine gömülmesi gerekliliğidir. Dahası, aynı kodun daha fazla HTML kodu üretmesi ve veritabanı sorguları için farklı SQL ifadeleri oluşturması gerekmekte, bunlar da uygulamanın birbirine dolanmış, okunması ve bakımı çok daha zorlaşmış birçok katmandan oluşması anlamına gelmektedir. Ajax uygulamaları içinse durum çok daha vahimdir ve olayın karmaşıklığı uygulamayı oluşturan sayfaların (ve dosyaların) sayısıyla doğru orantılı olarak kötüleşmektedir. 
 
-The functionality of the above example can be expressed in web2py with two lines of Python code:
+Buna karşın, yukarıdaki örnek kodla yapılan iş web2py'da sadece 2 satırlık Python kodu ile şöyle yapılabilmektedir:
 ``
 def index():
-    return HTML(BODY(H1('Records'), db().select(db.contacts.ALL)))
+	return HTML(BODY(H1('Kayitlar'), db().select(db.kisiler.ALL)))
 ``:code
 
-In this simple example, the HTML page structure is represented programmatically by the ``HTML``, ``BODY``, and ``H1`` objects; the database ``db`` is queried by the ``select`` command; finally, everything
-is serialized into HTML.
-Notice that ``db`` is not a keyword but a user defined variable. We will use this name consistently to refer to a database connection to avoid confusion.
+Bu basit örnekte, HTML sayfası programda ``HTML``, ``BODY`` ve ``H1`` nesneleriyle tanımlanmakta ve gösterilmekte, ``db`` isimli veritabanından ``select`` ile SQL sorgusu oluşturulmakta ve en son olarak üretilen herşey HTML'e dönüştürülmektedir. Burada dikkatinizi çekmek istediğim birşey var; ``db`` Python'un komutlarından biri değil, kullanıcının tanımlamış olduğu ve veritabanı ifade eden bir değişken sadece. Ancak, karmaşıklığı önlemek adına bu değişkeni veritabanı bağlantısını ifade etmek için bundan sonra bir cins isim olarak, herhangi bir veritabanı bağlantısını ifade etmek için kullanacağız.
 
-Web frameworks are typically categorized as one of two types: A "glued" framework is
-built by assembling (gluing together) several third-party components. A "full-stack" framework is built
-by creating components designed specifically to be tightly integrated and work together.
+Web uygulama çatıları genellikle iki ana grupta toplanı: "Yapıştırılmış" çatılar (İng. 'glued' frameworks) farklı birkaç veya daha fazla üçüncü taraf 'bileşen'lerin biraraya getirilerek ve 'yapıştırılarak' (ing. gluing together) birleştirilmesiyle oluşturulur. "Tam teşekküllü" çatılar (ing. full stack frameworks) ise özellike birlikte çalışmak üzere tasarlanmış ve birbirleriyle tam entegre olan bileşenlerden oluşmaktadır.
 
-web2py is a full-stack framework. Almost all of its components are built from scratch and are designed to work
-together, but they function just as well outside of the complete web2py framework. For example, the
-Database Abstraction Layer (DAL) or the template language can be used independently of the
-web2py framework by importing ``gluon.dal`` or ``gluon.template`` into your own Python applications. ``gluon`` is the name of the web2py module that contains system libraries. Some web2py libraries,
-such as building and processing forms from database tables, have dependencies on other portions
-of web2py. web2py can also work with third-party Python libraries, including other template languages
-and DALs, but they will not be as tightly integrated as the original components.
+web2py muntazam bir "tam teşekküllü uygulama çatısı"dır. Hemen tüm bileşenleri birbirleriyle çalışmak üzere yazılmıştır, ancak yine de birçoğu web2py'ın dışında da çalışabilmektedirler. Örneğin Veritabanı Soyutlaştırma Katmanını - DAL (İng. DAL - Database Abstraction Layer) veya şablon dilini web2py'dan bağımsız olarak kendi Python uygulamalarınızda ``import gluon.dal`` veya ``import gluon.template`` şeklinde programınızda içe aktararak (import) kullanabilirsiniz. ``gluon``, web2py'ın sistem kütüphanelerini içeren temel bileşenidir. Ancak veritabanı tablolarından bilgi çekerek formlar oluşturan ve bu formları işleyen bazı web2py modülleri web2py'ın diğer kendine has kütüphanelerine bağımlı oldukları için kendi başlarına (web2py'ın dışında) çalışmayabilirler. Öte yandan web2py örneğin diğer şablon dilleri ve DAL'ler gibi diğer üçüncü-taraf Python yazılımlarıyla da çalışabilmektedir, ancak bu üçüncü-taraf bileşenler web2py'ın asıl kendi bileşenleri kadar entegre olmayacaklardır. 
 
-### Model-View-Controller
+--------
+Çevirmenin Notu: Bu kitapta bu noktadan itibaren 'Database Abstraction Layer' için İng. orjinalindeki 'DAL' kısaltmasını kullanacağım, zira DAL aynı zamanda modülün adı, böylece çevirinin kullanımında koda bakarken terimin Türkçe karşılığının kısaltması olan 'VSK'ın neye karşılık geldiğini sürekli hatırlamak zorunda kalınmayacağını ümit ediyorum.
+--------
+
+### Model-Görünüm-Kontrolör
 ``Model-View-Controller``:inxx
-web2py encourages the developer to separate data representation (the model), data
-presentation (the view) and the application workflow (the controller). Let's consider again the previous example
-and see how to build a web2py application around it. Here is an example of the web2py MVC edit interface:
+web2py, geliştiricilerin şunları birbirlerinden ayırmalarını sağlamaya çalışır: Verinin temsili (Model), sunumu (Görünüm) ve uygulamanın iş akışı/mantıksal yönergeleri (Kontrolör). Biraz önceki örneği tekrar ele alalım ve bunu web2py'da bir uygulama olarak nasıl geliştirebileceğimize bakalım. İşte bir MVC düzenleme arayüzü:
 
 [[image @///image/en0.png center 480px]]
 
-The typical workflow of a request in web2py is described in the following diagram:
+Tipik bir iş akışı web2py'a gelen bir istemde (request) aşağıdaki gibidir:
 
 [[image @///image/en100.png center 480px]]
 
 In the diagram:
-- The Server can be the web2py built-in web server or a third-party server, such as Apache. The Server handles multi-threading.
-- "main" is the main WSGI application. It performs all common tasks and wraps user applications. It deals with cookies, sessions, transactions, URL routing and reverse routing, and dispatching.
-It can serve and stream static files if the web server is not doing it yet.
-- The Models, Views and Controller components make up the user application.
-- Multiple applications can be hosted in the same web2py instance.
-- The dashed arrows represent communication with the database engine(s). The database queries can be written in raw SQL (discouraged) or by using the web2py Database Abstraction Layer (recommended), so that web2py application code is not dependent on the specific database engine.
-- The dispatcher maps the requested URL to a function call in the controller. The output of the function can be a string or a dictionary of symbols (a hash table). The data in the dictionary is rendered by a view. If the visitor requests an HTML page (the default), the dictionary is rendered into an HTML page. If the visitor requests the same page in XML, web2py tries to find a view that can render the dictionary in XML. The developer can create views to render pages in any of the already supported protocols (HTML, XML, JSON, RSS, CSV, and RTF) or in additional custom protocols.
-- All calls are wrapped into a transaction, and any uncaught exception causes the transaction to be rolled back. If the request succeeds, the transaction is committed.
-- web2py also handles sessions and session cookies automatically, and when a transaction is committed, the session is also stored, unless specified otherwise.
-- It is possible to register recurrent tasks (via cron) to run at scheduled times and/or after the completion of certain actions. In this way it is possible to run long and compute-intensive tasks in the background without slowing down navigation.
+- 'Sunucu' web2py'ın kendi bütünleşik sunucusu olabileceği gibi 3.taraf bir sunucu yazılıı da olabilir, örneğin Apache gibi. Çoklu süreçlendirmeyi (multi-threading) sunucu üstlenir. 
+- "main" ana WSGI uygulamasıdır. Tüs rutin işleri yapar ve kullanıcı uygulaamarını idare eder. Çerezler, oturumlar, aktarımlar, URL yönlendirmeleri, geri bildirimler ve başlangıç ile ilgilenir. Eğer sunucu halihazırda zaten ilgilenmiyorsa sabit (statik) dosyaları da sunabilir veya akışa (stream) verebilir.
+- Modeller, Görünümler ve Kontrol bileşenleri hep birlikte kullanıcı uygulamalarını oluşturmaktadır.
+- Birden fazla uygulama aynı web2py oturumunda çalıştırılabilir. 
+- Aralıklı çizgiler veritaban(lar)ıyla iletişim(ler)i simgelemektedir. Veritabanları ve bunların kullanımı temel SQL komutlarıyla yazılabildiği gibi (ki bunu çok önermiyoruz), daha çok tavsiye ettiğimiz şekilde web2py'ın DAL'ı (Database Abstraction Layer) ile de yapılabilir. DAL ile veritabanı sorguları yazarak kullandığımız veritabanı programından bağımsız olarak aynı komutlarla farklı veritabanlarından sorgu üretebilirsiniz, bu sayede veritabanı programını değiştiresniz de DAL ile yazılmış sorgu kodunu değiştirmeniz gerekmez. 
+- Uygulama başlatıcı (dispatcher) istenen URL adresini kontrolördeki ilgili fonksiyona iletir. Bu fonksiyonun çıktısı bir yazı dizimi veya semboller sözlüğü ('hash' table) olabilir. Sözlükteki veri Görünüm bileşeni tarafından sunuma hazırlanarak giydirilir (render). Eğer (öntanımlı şekilde) ziyaretçi bir HTML sayfası istemişse, sözlük şeklindeki veri bir HTML sayfası olarak sunulur. Eğer XML şeklinde istenmişse, web2py bu sözlüğü XML'e dönüştürebileceği bir Görünüm bulmaya çalışacaktır. Geliştirici, veri modelini istediği şekilde sunabilmek için halihazırda desteklediğimiz protokollerden (HTML, XML, JSON, RSS, CSV, RTF) herhangi birini veya başka bir protokolü kullanabilir. 
+- Tüm istemler bir aktarım işlemi (transaction) sırasına alınır ve herhangi bir istisna (exception) oluşması durumuda aktarım işlemini geri alır. Eğer istem başarılı olmuşsa aktarım da hayata geçirilir. 
+- web2py oturumları ve oturum çerezlerini de otomatik olarak ele almakta, ve bir aktarım işlemi gerçekleştirildiğinde oturum da -aksi belirtilmemişse- otomatik olarak keydedilmektedir.
+- Tekrar tekrar yapılması gereken rutin işleri (cron ile) belirli bir iş takvimine bağlamak ve yapılacak mutad işleri belli zamanlarda ve/ya belirli olayların gerçekleşmesi şartına bağlayarak çalıştırmak web2py ile mümkündür. Bu şekilde uzun ve işlemci zamanı alacak görevleri (örneğin testler) sunucunun ve/ya uygulamanın görece rahat olduğu zamanlarda arka planda çalıştırıp kullanıcının sayfadaki gezintisini yavaşlatmamak mümkün olmaktadır. 
 
-Here is a minimal and complete MVC application, consisting of three files:
+Şimdi sadece üç dosyadan oluşan küçük ve fakat tastamam bir MVC uygulamasına göz atalım:
 
-**"db.py" is the model:**
+**"db.py" dosyası, Model'dir:**
 
 ``
 db = DAL('sqlite://storage.sqlite')
-db.define_table('contact',
-   Field('name'),
-   Field('phone'))
+db.define_table('kisi',
+   Field('isim'),
+   Field('telefon'))
 ``:code
 
-It connects to the database (in this example a SQLite database stored in the ``storage.sqlite`` file) and
-defines a table called ``contact``. If the table does not exist, web2py creates it and, transparently
-and in the background,
-generates SQL code in the appropriate SQL dialect for the specific database engine used.
-The developer can
-see the generated SQL but does not need to change the code if the database back-end, which defaults to
-SQLite, is replaced with MySQL, PostgreSQL, MSSQL, FireBird, Oracle, DB2, Informix, Interbase, Ingres, and the Google App Engine (both SQL and NoSQL).
+Bu dosyadaki kod bir vtna bağlanarak (bu örneğimizde storage.sqlite dosyasında saklanan bir SQLite vt) ``kisi`` adlı bir tablo oluşturmakta. Eğer tablo mevcut değilse web2py onu oluştururu ve açık bir şekilde arka planda ne olduğunu göstererek kullanılan özel vt sistemine uygun bir biçimde SQL komutunu oluşturur. Uygulama geliştirici, üretilen SQL kodunu görebilmektedir. Ancak öntanımlı olarak SQLite seçili olsa da, vt olarak MySQL, PostgreSQL, MSSQL, FireBird, Oracle, DB2, Informix, Interbase, Ingres ve Google App Engine gibi (hem SQL hem de NoSQL) geniş bir vt sistemleri listesinden herhangi birini seçip sistemini değiştirmesi durumunda bu ``kisi`` tablosunu oluşturmak için kodu değiştirmesine gerek duymamaktadır. 
 
-Once a table is defined and created, web2py also generates a fully functional web-based database
-administration interface, called **appadmin**, to access the database and the tables.
+Tablo tanımlanıp oluşturulduktan sonra web2py vtna ve tablolara erişim için **appadmin** adlı, vtyla alakalı tüm işlemlerin yapılabildiği web tabanlı bir vt yönetim arayüzü oluşturur. 
 
-**"default.py" is the controller:**
+**"default.py" Kontrolör'dür:**
 
 ``
-def contacts():
-    grid=SQLFORM.grid(db.contact, user_signature=False)
+def kisiler():
+    grid=SQLFORM.grid(db.kisi, user_signature=False)
     return locals()
 ``:code
 
-In web2py, URLs are mapped to Python modules and function calls. In this case, the controller contains
-a single function (or "action") called ``contacts``. An action may
-return a string (the returned web page) or a Python dictionary (a set of
-``key:value`` pairs) or the set of local variables (as in this example).
-If the function returns a dictionary, it is passed to a view with the same
-name as the controller/function, which in turn renders the page.
-In this example, the function ``contacts`` generates a select/search/create/update/delete grid for table ``db.contact``
-and returns the grid to the view.
+web2py'da URL'ler Python modülleri ve fonksiyonlara eşlenirler (map). Yani her bir URL adres satırı bir Python modeli veya fonksiyonunun çalıştırılmasına eşlenmektedir. Yukarıdaki örnekte, kontrol modülü olan default.py dosyasında tek bir fonksiyon (veya "işlem") vardır: ``contacts``. Bir işlem, çıktı olarak bir karakter dizisi (string) -ki bu durumda isteme cevap olarak verilen bir HTML web sayfası- veya Python sözlüğü (anahtar:değer şeklinde ikililerden oluşan küme), veya da bu örnekte olduğu gibi bir dizi yerel değişken geri verebilir (return). Eğer fonksiyon bir sözlük geri vermişse, bu sözlük de kontrolör ile aynı ada sahip görünüme aktarılır, ve bu görünüm dosyası/kodu da sayfayı son görünümüne kavuşturur. Bu örnekte, ``contacts`` fonksiyonu/kontrolörü ``db.kisi`` tablosu için bir Seç/Ara/Oluştur/Güncelle/Sil listesi üretir ve bu listeyi görünüme iletir. 
 
-**"default/contacts.html" is the view:**
+**"default/kisi.html" Görünüm'dür:**
 
 ``
 {{extend 'layout.html'}}
-<h1>Manage My Contacts</h1>
+<h1>Kişilerimi Düzenle</h1>
 {{=grid}}
 ``:code
 
-This view is called automatically by web2py after the associated controller function (action) is executed.
-The purpose of this view is to render the variables in the returned dictionary (in our case ``grid``) into HTML.
-The view file is written in HTML, but it embeds Python code delimited by the special ``{{`` and ``}}``
-delimiters. This is quite different from the PHP code example, because the only code
-embedded into the HTML is "presentation layer" code. The "layout.html" file referenced at the top of the
-view is provided by web2py and constitutes the basic layout for all web2py applications. The layout file can
-easily be modified or replaced.
+Bu görünüm, ilgili kontrolör fonksiyonu (işlem) çalıştırıldıktan sonra web2py tarafından otomatik olarak çağrılır. Bu görünümün amacı işlemin çıktı olarak geri döndürdüğü sözlüğün (bizim durumumuzda ``grid``) HTML olarak sunulmasıdır. 
 
-### Why web2py
+Görünüm dosyası HTML olarak yazılır, fakat HTML kodunun içine özel ``{{`` ve ``}}`` karakterleri içine alınmış Python kodu iliştirilir. Bu, yukarıdaki PHP kodundan farklıdır, zira burada HTML dosyası içine iliştirilen tek kod "sunum katmanı" kodudur. Görünümün en başında atıf yapılan "layout.html" dosyası  web2py'la birlikte gelir ve tüm web2py uygulamaları için temel bir görünüm şablonu sunar. Bu şablon "layout.html" dosyası yine istenilen şekilde düzeltilebilir veya başkasıyla değiştirilebilir. 
+
+### Neden web2py?
+
+w2p birçok web uygulama çatılarından birisi, ancak saygı uyandıran ve kendine münhasır vasıfları bulunmaktadır. web2py aslen bir eğitim aracı olarak geliştirilmiş olup şu konular öncelikli olarak gözönünde bulundurulmuştur:
 
 web2py is one of many web application frameworks, but it has compelling and unique features.
 web2py was originally developed as a teaching tool, with the following primary motivations:
