@@ -179,24 +179,21 @@ Görünüm dosyası HTML olarak yazılır, fakat HTML kodunun içine özel ``{{`
 
 ### Neden web2py?
 
-w2p birçok web uygulama çatılarından birisi, ancak saygı uyandıran ve kendine münhasır vasıfları bulunmaktadır. web2py aslen bir eğitim aracı olarak geliştirilmiş olup şu konular öncelikli olarak gözönünde bulundurulmuştur:
+w2p birçok web uygulama çatılarından birisi, ancak saygı uyandıran ve kendine münhasır vasıfları bulunmaktadır. web2py aslen bir eğitim aracı olarak geliştirilmiş olup şunlar öncelikli amaç olarak gözönünde bulundurulmuştur:
+- Fonksiyonellikten ödün vermeden kullanıcıların sunucu tarafında web geliştirmeyi kolayca öğrenebilmeleri. Bunun için, web2py herhangi bir kurulum veya yapılandırma gerektirmemekte, herhangi bir ön koşul program istememekte (Python 2.5 ve onun standart kütüphanelerine ihtiyaç duyan daoğrudan kaynak kodunun paylaşıldığı dağıtım hariç), ve kendi içinde bir Debugger ve veritabanı arayüzü içeren bir IDE (Integrated Development Environment - Bütünleşik Geliştirme Ortamı) gibi işlevlerinin ve özelliklerinin çoğunu Web arayüzü ile sunabilmektedir. 
+- web2py ilk gününden beri çok kararlı bir yapıda olmuştur, bunun sebebi yukardan aşağı dizayn prensibini uygulamış olmasıdır; yani mesela API'sı yazılmaya başlamadan önce dikkatlice dizayn edilmiştir. Sürekli yeni işlevler eklenmesine rağmen, web2py hiçbir zaman geriye dönük uyumluluğunu kaybetmemiş ve bundan sonra gelecekte de, her nasıl bir yeni özellik veya işlev eklense de yine geriye dönük desteğini ve uyumluluğunu devam ettirecektir.     
+- web2py, aşağıda OWASP``owasp``:cite 'ın da belirttiği üzere, diğer birçok çağdaş web uygulamasını etkileyen en önemli güvenlik meselelerini gerçekleşmeden önce ve tedarikli olarak ele alır.
+- web2py hafiftir. Tüm toplam çekirdek (core) kütüphanelerinin, ki buna Veritabanı Soyutlaştırma Katmanı DAL, şablon dili ve tüm yardımcıları da dahildir, toplam boyutu 1.4MB ancak etmekte. Bunun yanında birkaç örnek uygulama ve resimleri de içeren web2py'ın standart dağıtım kaynak kodunun tümü ise toplam sadece 10.4MB. 
+- web2py çok az sistem kaynağı kullanır ve gerçekten hızlıdır. Timothe Farrell tarafından geliştirilmiş olan Rocket``rocket``:cite  WSGI web sunucusunu kullanmakta. Bu sunucu mod_wsgi'li Apache sunucusu kadar hızlı olup, SSL ve IPv6'yı da desteklemektedir. 
+- wep2py model, kontrolör ve görünümler için Python sözdizimini kullanmakta, ancak (Python'da yazılmış diğer web çatılarının aksine) model veya kontrolör kodlarını içe aktarmaz (import), sadece doğrudan çalıştırır. Bu, sunucunun (faal bir sistemde dahi) her defasında açıp kapatılmasına gerek kalmadan uygulamaların kurulup kaldırılması ve/ya değiştirilebilmesi ve farklı uygulamaların içerdikleri modüller birbirleriyle çakışmadan da beraber çalışabilmeleri anlamına gelmektedir. 
+- web2py ORM (Nesne İlişkisel Eşleme, İng.Object Relational Mapping) yerine DAL kullanmaktadır. Kavramsal açıdan bu, farklı vt tablolarının farklı sınıflara değil, bir ``Table`` sınıfının farklı örneklemelerine (instance) eşleştirildiği , öte yandan da farklı vt kayıtlarının ilgili tablo sınıfının farklı örneklemelerinde değil de bir ``Row`` (satır) sınıfının farklı örneklemelerine eşleştirildiği anlamına gelmektedir. 
+- Pratik açıdan, bu SQL sözdiziminin neredeyse birebir şekilde DAL sözdizimiyle eşleştiği ve birçok popüler ORM yazılımında olduğu gibi arka planda çalışan karmakarışık bir metasınıf (metaclass) programlamasının (ki bu da kodun ve dolayısıyla istemlere verilecek cevapların yavaşlaması demektir) bulunmadığı anlamına gelmektedir. 
 
-web2py is one of many web application frameworks, but it has compelling and unique features.
-web2py was originally developed as a teaching tool, with the following primary motivations:
-- Easy for users to learn server-side web development without compromising functionality. For this reason, web2py requires no installation and no configuration, has no dependencies (except for the source code distribution, which requires Python 2.5 and its standard library modules), and exposes most of its functionality via a Web interface, including an Integrated Development Environment with Debugger and database interface.
-- web2py has been stable from day one because it follows a top-down design; i.e., its API was designed before it was implemented. Even as new functionality has been added, web2py has never broken backwards compatibility, and it will not break compatibility when additional functionality is added in the future.
-- web2py proactively addresses the most important security issues which plague many modern web applications, as determined by OWASP``owasp``:cite  below.
-- web2py is lightweight. Its core libraries, including the Database Abstraction Layer, the template language, and all the helpers amount to 1.4MB. The entire source code including sample applications and images amounts to 10.4MB.
-- web2py has a small footprint and is very fast. It uses the Rocket``rocket``:cite  WSGI web server developed by Timothy Farrell. It is as fast as Apache with mod_wsgi, and supports SSL and IPv6.
-- web2py uses Python syntax for models, controllers, and views, but does not import models and controllers (as all the other Python frameworks do) - instead it executes them. This means that apps can be installed, uninstalled, and modified without having to restart the web server (even in production), and different apps can coexist without their modules interfering with one another.
-- web2py uses a Database Abstraction Layer (DAL) instead of an Object Relational Mapper (ORM). From a conceptual point of view, this means that different database tables are mapped into different instances of one ``Table`` class and not into different classes, while records are mapped into instances of one ``Row`` class, not into instances of the corresponding table class. From a practical point of view, it means that SQL syntax maps almost one-to-one into DAL syntax, and there is no complex metaclass programming going on under the hood as in popular ORMs, which would add latency.
+WSGI ``wsgi-w``:cite ``wsgi-o``:cite (Web Server Gateway Interface), bir web sunucusuyla Python uygulamaları arasında iletişimi sağlamakla görevli, gittikçe yaygınlaşan bir Python standardıdır. 
 
-WSGI ``wsgi-w``:cite ``wsgi-o``:cite (Web Server Gateway Interface) is an emerging Python standard for communication between a web server and Python applications.
-
-Here is a screenshot of the main web2py **admin** interface:
+Aşağıda web2py'ın ana **admin** (yönetici) arayüzünü görmektesiniz:
 
 [[image @///image/en200.png center 480px]]
-
 
 ### Security
 ``security``:inxx
