@@ -1,91 +1,94 @@
-## Overview
+## Genel Görünüm
 
-### Startup
+### web2py'ı Başlatma
 
 ``Linux``:inxx ``Mac``:inxx ``Windows``:inxx
 
-web2py comes in binary packages for Windows and Mac OS X. They include the Python interpreter so you do not need to have it pre-installed. There is also a source code version that runs on Windows, Mac, Linux, and other Unix systems. The source code package assumes that Python is already installed on the computer.
+web2py, Windows ve MacOS işletim sistemleri için hazır paketler halinde sunulmaktadır. Bu paketler kendi içlerinde Python derleyicisi hazır bulunur halde gelmektedir, dolayısıyla kurulum öncesinde hazır bir Python derleyicisi kurulmuş olması gerekmez. Öte yandan yine Windows ve Mac OS'un dışında Linux ve diğer UNIX sistemlerinde çalıştırılabilecek kaynak kodları da bulunmaktadır. Yalnız, kaynak kodunun çalıştırılabilmesi için Python'un bilgisayarda önceden kurulmuş olması gerekir. 
 
-web2py requires no installation. To get started, unzip the downloaded zip file for your specific operating system and execute the corresponding ``web2py`` file.
+web2py herhangi bir kurulum gerektirmez. Başlamak için kendi işletim sisteminize uygun olan .zip dosyasını indirip arşivi açın ve ``web2py`` dosyasını çalıştırın. 
 
-On Unix and Linux (source distribution), run:
+Unix ve Linux'ta kaynak kodundan çalıştırmak için:
+
 ``
 python web2py.py
 ``:code
 
-On OS X (binary distribution), run:
+OS X ise çalıştırılabilir paket programı çalıştırın:
 ``
 open web2py.app
 ``:code
 
-On Windows (binary web2py distribution), run:
+Windows'ra çalıştırılabilir web2py.exe programını çalıştırın:
 ``
 web2py.exe
 ``:code
 
-On Windows (source web2py distribution), run:
+Windows'ta web2py kaynak kodunu çalıştırmak için ise komut satırında:
 ``
 c:/Python27/python.exe web2py.py
 ``:code
+girin.
 
 ------
-Attention, to run web2py on Windows from source you must install first Mark Hammond's win32 extensions from ``http://sourceforge.net/projects/pywin32/``.
+Dikkat: Windows'ta web2py'ı kaynak kodundan çalıştırabilmek için önce Mark Hammond'ın 
+ ``http://sourceforge.net/projects/pywin32/`` 
+adresinden idirebileceğiniz Win32 Python eklentilerini kurmuş olmanız gerekmektedir.  
 ------
 
-The web2py program accepts various command line options which are discussed later.
+web2py, daha sonra açıklanacak olan farklı sayıda komut satırı değişkenleri ve seçeneklerini kabul etmektedir.
 
-By default, at startup, web2py displays a startup window and then displays a GUI widget that asks you to choose a one-time administrator password, the IP address of the network interface to be used for the web server, and a port number from which to serve requests. By default, web2py runs its web server on 127.0.0.1:8000 (port 8000 on localhost), but you can run it on any available IP address and port. You can query the IP address of your network interface by opening a command line and typing ``ipconfig`` on Windows or ``ifconfig`` on OS X and Linux. From now on we assume web2py is running on localhost (127.0.0.1:8000). Use 0.0.0.0:80 to run web2py publicly on any of your network interfaces.
+Öntanımlı olarak, web2py başlangıçta bir açılış penceresi açar. Daha sonra da yönetici hesabı şifresini, web sunucusu olarak çalışacak olan ağ (network) arayüzünün IP adresini ve istemlere cevap verilecek port numarasını soran bir GUI widget gösterir. Normalde; öntanımlı olarak web2py web sunucusuna 127.0.0.1: (localhost üzerinde 8000 nolu port) adresinden çalıştırır, ancak geçerli herhangi br başka IP adresi ve port üzerinde çalıştırılabilir. Ağ arayüzünüzün IP adresini komut satırından Windows'ta ``ipcofing`` ve OS X ile Lünux'ta da ``ifconfig`` yazarak öğrenebilirsiniz. Bundan itibaren, web2py'ın localhost'ta (127.0.0.1:8000) çalışıyor olduğunu farzedeceğiz. web2pyı herhangi bir ağ arayüzü üzerinde dış ağa açık (public) şekilde çalıştırmak için ise 0.0.0.0:80 adresini de kullanabilirsiniz. 
 
 [[image @///image/en400.png center 306px]]
 
-If you do not provide an administrator password, the administration interface is disabled. This is a security measure to prevent publicly exposing the admin interface.
+Eğer herhangi bir yönetici şifresi belirlemediyseniz, yönetici arayüzü etkinleştirilmez. Bu, sitenizin kamuya açık şekilde kalmaması için alınan bir güvenlik tedbiridir. 
 
-The administrative interface, **admin**, is only accessible from localhost unless you run web2py behind Apache with mod_proxy. If **admin** detects a proxy, the session cookie is set to secure and **admin** login does not work unless the communication between the client and the proxy goes over HTTPS; this is a security measure. All communications between the client and **admin** must always be local or encrypted; otherwise an attacker would be able to perform a man-in-the middle attack or a replay attack and execute arbitrary code on the server.
+**admin**, yani yönetici arayüzü eper web2py'ı bir Apache sunucusu üzerinde çalıştırmıyorsanız, sadece localhost'tan ulaşılabilir durumdadır: **admin** arayüzü eğer bir vekil sunucu (proxy server) tesbit ederse, oturum çerezi (session cookie) güvenli olarak atanır ve **admin** (yönetici) giriş sayfası, bir güvenlik önlemi olarak istemci (client) ile vekil sunucu arasındaki bağlantı (HTTPS) üzerinden sağlanmadığı sürece açılamaz. İstemci ile **admin** arayüzü arasındaki bağlandı kesinlikle ya yerel ya da güvenli/şifreli olmalıdır, aksi takdirde bir saldırgan ``simsar`` (man-in-the-middle) veya ``tekrarlama`` (replay) saldırıları yaparak kendi farklı kodunu sunucunuzda çalıştırabilir. 
 
-After the administration password has been set, web2py starts up the web browser at the page:
+Yönetici şifresi belirlendikten sonra, web2py öntanımlı web tarayıcısında
+
 ``
 http://127.0.0.1:8000/
 ``:code
-
-If the computer does not have a default browser, open a web browser and enter the URL.
+adresini açar. Eğer bilgisayarda öntanımlı bir tarayıcı bulunmuyorsa, bu adres herhangi bir web tarayıcısı ile de açılabilir. 
 
 [[image @///image/en500.png center 480px]]
 
-Clicking on "administrative interface" takes you to the login page for the administration interface.
-
+"Yönetici arayüzü"nü tıklamak sizi yönetici arayüzünün giriş sayfasına yönlendirecektir. 
+ 
 [[image @///image/en600.png center 480px]]
 
-The administrator password is the password you chose at startup.
-Notice that there is only one administrator, and therefore only one administrator password. For security reasons, the developer is asked to choose a new password every time web2py starts unless the <recycle> option is specified. This is distinct from the authentication mechanism in web2py applications.
+Yönetici şifresi web2py'ı ilk açtığınızda açılan widget formunda girdiğiniz şifredir. Farkedeceğiniz üzere, tek bir yönetici bulunmaktadır ve dolayısıyla tek bir yönetici şifresi vardır. Güvenlik önlemi olarak, web2py her başlatıldığında geliştiriciden yeni bir şifre belirlemesini ister, ancak <recycle> seçeneği belirlenmişse sormaz. Bu, eb2py uygulamaalarındaki kimlik doğrulama (authentication) mekanizmasından farklıdır. 
 
-After the administrator logs into web2py, the browser is redirected to the "site" page.
+Yönetici sisteme yaptıktan sonra tarayıcı "site" sayfasına yönlendirilir. 
 
 [[image @///image/en700.png center 480px]]
 
-This page lists all installed web2py applications and allows the administrator to manage them.
-web2py comes with three applications:
+Bu sayfa, yönetici için web2py'da kurulmş olan tüm uygulamaları listeler ve onları düzenleme imkanı sunar. Standart bir web2py kurulumunda beraber şu üç uygulama kurulur:
+
 ``admin``:inxx ``examples``:inxx ``welcome``:inxx ``scaffolding``:inxx
-- An **admin** application, the one you are using right now.
-- An **examples** application, with the online interactive documentation and a replica of the web2py official website.
-- A **welcome** application. This is the basic template for any other web2py application. It is referred to as the ''scaffolding application''. This is also the application that welcomes a user at startup.
+- **admin** uygulaması, şu an kullandığınız,
+- **examples** (Örnekler) uygulaması ki, bunda çevrimiçi (online) interaktif dökümentasyon ve web2py'ın resmi sitesinin birebir kopyası bulunmaktadır. 
+- Bir **Hoşgeldiniz** uygulaması. Bu, herhangi başka bir web2py uygulaması için temel bir şablon olarak kullanılabilir. Bundan sonra bu uygulama ''scaffolding aplication'' uygulama olarak adlandırılacaktır. Bu aynı zamanda kullanıcıyı başlangıçta ilk karşılayan sayfadır.  
 
 ``appliances``:inxx
-Ready-to-use web2py applications are referred to as web2py ''appliances''.  You can download many freely available appliances from ``appliances``:cite . web2py users are encouraged to submit new appliances, either in open-source or closed-source (compiled and packed) form.
+Kullanılmaya hazır web2py uygulamaları web2py ''araçları'' olarak adlandırılır. Birçok ücretsiz hazır web2py aracı ``appliances``:cite'ten indirebilirsiniz. web2py kullanıcılarının da ister açık yazılım, ister kapalı kod (derlenmiş ve paketlenmiş) şeklinde yeni araçlar oluşturup bunları paylaşmalarını güçlü bir şekilde destekliyoruz. 
 
-From the **admin** application's ''site'' page, you can perform the following operations:
-- **install** an application by completing the form on the bottom right of the page. Give a name to the application, select the file containing a packaged application or the URL where the application is located, and click "submit".
-- **uninstall** an application by clicking the corresponding button. There is a confirmation page.
-- **create** a new application by choosing a name and clicking "create".
-- **package** an application for distribution by clicking on the corresponding button. A downloaded application is a tar file containing everything, including the database. You should not untar this file; it is automatically unpackaged by web2py when installed with **admin**.
-- **clean up** an application's temporary files, such as sessions, errors and cache files.
-- **enable/disable** each application. When an application is disabled it cannot be called remotely but it is not disabled from localhost. This means disabled applications can still be accessed behind a proxy. An application is disabled by creating a file called "DISABLED" in the application folder. Users who try to access a disabled application will receive a 503 HTTP error. You can use routes_onerror to customize the error page.
-- **EDIT** an application.
+**admin** uygulamasının ''site'' sayfasından aşağıdaki işlemler yapılabilir:
+- **kurulum**: sayfanın sağ-alt köşesindeki formu doldurarak uygulama kurabilirsiniz. Sadece ugulamanıza bir isim verin, sonra paketlenmiş uygulamanızı içeren dosyayı ya da uygulamanın bulunduğu URL adresini girin ve ''Gir'' tuşuna basın. 
+- **Uygulama kaldır**: Kaldırma tuşuna basılarak ilgili uygulama kaldırılabilir. Tıkladıktan sonra onaylama sayfası açılır. 
+- **Oluştur**: Uygun bir isim seçilip ''Oluştur'' butonuna basılarak yeni bir uygulama oluşturulabilir. 
+- **Paketleme**: Bir uygulama, ilgili butona basılarak dağıtım için paketlenebilir. İndirilebilir haldeki bir uygulama ilgili veritabanı dahil herşeyi içeren bir ''.tar'' dosyasıdır. Bir uygulama paketini ''untar'' ile açmanıza gerek yoktur; **admin** arayüzü ile kurulduğunda paketler otomatik olarak web2py tarafından uygun şekilde açılır. 
+- **Temizleme**: Bir uygulamanın oturum dosyaları, hata ve tampon dosyaları gibi geçici dosyalarını temizler. 
+- **Etkinleştir/Devre dışı**: Her uygulama web2py'dan kaldırmaya gerek kalmadan geçici bir süre için ektinleştirilebilir veya devre dışı bırakılabilir. Bİr uygulama devre dışı bırakıldığında, uzaktan/istemciden kullanıma kapanır ancak localhost'tan ulaşılabilir durumda kalır. Bu, etkinleştirilmiş/devre dışı bırakılmış uygulamaların bir vekil sunucu arkasından hala ulaşılabilir olduğu anlamına gelir. Bir uygulama, uygulamanın kendi dizininde ''DISABLED'' adlı bir dosyanın oluşturulmasıyla devre dışı bırakılabilir. Devre dışı bırakılmış bir uygulamaya ulaşmaya çalışan kullanıcılara 503 HTTP hatası verilir. Hata sayfasını değiştirip kendi isteğiniz doğrultusunda özelleştirmek için ''routes_onerror''ı kullanabilirsiniz.
+- **DÜZENLE**: Bir uygulamanın düzenlenmesini sağlar.  
 
 -----
-When you create a new application using **admin**, it starts as a clone of the "welcome" scaffolding app with a "models/db.py" that creates a SQLite database, connects to it, instantiates Auth, Crud, and Service, and configures them. It also provides a "controller/default.py" which exposes actions "index", "download", "user" for user management, and "call" for services. In the following, we assume that these files have been removed; we will be creating apps from scratch.
+**admin** arayüzü ile yeni bir uygulama oluşturulduğunda, bu uygulama ilk başta "Hoşgeldiniz" uygulamasının bir kopyası olarak oluşturulur. Uygulamanın kendi "models/db.py" dosyası oluşturulur; bu dosya SQLite veritabanını oluşturur; ona bağlanır; Auth, Crud, and Service hizmet nesnelerini oluşturur ve ayarlamalarını yapar. Aynı uygulama "index", "download" ve kullanıcı yönetimi için "user" fonksiyonlarını sunan bir "controller/default.py" dosyası oluşturur ve bu fonksiyon bu hizmetleri çağırır (call). Aşağıda bu dosyaların hiç oluşturulmadığını veya kaldırıldığını farzederek uygulamaları sıfırdan oluşturacağız. 
 -----
 
-web2py also comes with a **wizard**, described later in this chapter, that can write an alternate scaffolding code for you based on layouts and plugins available on the web and based on high level description of the models.
+web2py, yine bu bölüm içerisinde daha sonra açıklanacak olan bir **Sihirbaz** (wizard) içerir. Bu sihirbaz, internette bulabileceğiniz tasarım şablonlarına ve yüksek seviyeli model tanımlamalarınıza dayalı olarak size alternatif bir 'scaffolding' uygulaması oluşturabilir.
 
 ### Simple examples
 
