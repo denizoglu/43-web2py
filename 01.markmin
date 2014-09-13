@@ -195,14 +195,17 @@ Aşağıda web2py'ın ana **admin** (yönetici) arayüzünü görmektesiniz:
 
 [[image @///image/en200.png center 480px]]
 
-### Security
+### Güvenlik
 ``security``:inxx
-The Open Web Application Security Project``owasp``:cite  (OWASP) is a free and open worldwide community focused
-on improving the security of application software.
 
-OWASP has listed the top ten security issues that put web applications at risk.
-That list is reproduced here, along with a description of how each issue is addressed by web2py:
-- ``cross site scripting``:inxx  "Cross Site Scripting (XSS): XSS flaws occur whenever an application takes user supplied data and sends it to a web browser without first validating or encoding that content. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, possibly introduce worms, etc." ''web2py, by default, escapes all variables rendered in the view, preventing XSS.''
+Açık Web Uygulamaları Güvenlik Projesi (İng. Open Web Application Security Project``owasp``:cite  (OWASP)) uygulama yazılımlarının güvenliklerini artırmayı amaçlayan tüm dünyaya yayılmış açık bir topluluktur.
+
+OWASP web uygulamalarının güvenliğini tehlikeye atan en önemli 10 güvenlik konusunu açıkladı:
+
+Bu listeyi burada da tek tek sayalım ve web2py'ın bu problemlerin her birine nasıl bir çözüm getirdiğine bakalım: 
+- ``cross site scripting``:inxx 
+
+  "Cross Site Scripting (XSS): XSS flaws occur whenever an application takes user supplied data and sends it to a web browser without first validating or encoding that content. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, possibly introduce worms, etc." ''web2py, by default, escapes all variables rendered in the view, preventing XSS.''
 - ``injection flaws``:inxx "Injection Flaws: Injection flaws, particularly SQL injection, are common in web applications. Injection occurs when user-supplied data is sent to an interpreter as part of a command or query. The attacker's hostile data tricks the interpreter into executing unintended commands or changing data." ''web2py includes a Database Abstraction Layer that makes SQL injection impossible. Normally, SQL statements are not written by the developer.  Instead, SQL is generated dynamically by the DAL, ensuring that all inserted data is properly escaped.''
 - ``malicious file execution``:inxx "Malicious File Execution: Code vulnerable to remote file inclusion (RFI) allows attackers to include hostile code and data, resulting in devastating attacks, such as total server compromise." ''web2py allows only exposed functions to be executed, preventing malicious file execution. Imported functions are never exposed; only actions are exposed. web2py uses a Web-based administration interface which makes it very easy to keep track of what is exposed and what is not.''
 - ``insecure object reference``:inxx "Insecure Direct Object Reference: A direct object reference occurs when a developer exposes a reference to an internal implementation object, such as a file, directory, database record, or key, as a URL or form parameter. Attackers can manipulate those references to access other objects without authorization." ''web2py does not expose any internal objects; moreover, web2py validates all URLs, thus preventing directory traversal attacks. web2py also provides a simple mechanism to create forms that automatically validate all input values.''
